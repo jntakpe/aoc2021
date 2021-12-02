@@ -12,7 +12,14 @@ internal class InputKtTest {
 
         @Test
         fun `should return lines`() {
-            assertEquals(listOf("1-3 a: abcde", "1-3 b: cdefg", "2-9 c: ccccccccc"), readInputLines(2))
+            assertEquals(listOf(
+                "forward 5",
+                "down 5",
+                "forward 8",
+                "up 3",
+                "down 8",
+                "forward 2",
+            ), readInputLines(2))
         }
 
         @Test
