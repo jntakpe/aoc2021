@@ -1,17 +1,10 @@
 package com.github.jntakpe.aoc2021.days.day2
 
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import com.github.jntakpe.aoc2021.shared.DayTest
 
-internal class Day2Test {
+internal class Day2Test : DayTest<Day2>() {
 
-    @Test
-    fun `part 1 sample is ok`() {
-        assertEquals(150, Day2.part1())
-    }
-
-    @Test
-    fun `part 2 sample is ok`() {
-        assertEquals(900, Day2.part2())
-    }
+    override val day = Day2
+    override val expectPart1 = 150
+    override val expectPart2 = 900
 }
