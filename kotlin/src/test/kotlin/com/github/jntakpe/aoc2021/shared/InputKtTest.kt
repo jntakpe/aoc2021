@@ -25,7 +25,7 @@ internal class InputKtTest {
         @Test
         fun `should ignore empty lines`() {
             val lines = readInputLines(3)
-            assertEquals(11, lines.size)
+            assertEquals(12, lines.size)
             assertFalse(lines.contains(""))
         }
     }
@@ -44,7 +44,7 @@ internal class InputKtTest {
 
         @Test
         fun `should split on blank`() {
-            val lines = readInputSplitOnBlank(4)
+            val lines = readInputSplitOnBlank(26)
             assertEquals(4, lines.size)
             assertEquals(listOf(
                 """ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
