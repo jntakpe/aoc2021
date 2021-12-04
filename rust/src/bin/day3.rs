@@ -21,7 +21,7 @@ impl Day for Day3 {
     }
 
     fn part2(&self) -> usize {
-        todo!()
+        rating(&self.input, 0, false) * rating(&self.input, 0, true)
     }
 }
 
@@ -34,11 +34,20 @@ fn common_bit(bits: &Vec<String>, index: usize) -> char {
     }
 }
 
-fn reverse_bits(bits: &str) -> String {
-    bits.chars().map(|c| reverse(c)).join("")
+fn rating(bits: &Vec<String>, index: usize, reverse: bool) -> usize {
+    let bit = if reverse { reverse_bit(common_bit(&bits, index)) } else { common_bit(&bits, index) };
+    let filtered: Vec<String> = bits.iter().filter(|s| s.chars().nth(index).unwrap() == bit).map(|s| String::from(s)).collect();
+    if filtered.len() == 1 {
+        return decimal(filtered[0].as_str());
+    }
+    rating(&filtered, index + 1, reverse)
 }
 
-fn reverse(bit: char) -> char {
+fn reverse_bits(bits: &str) -> String {
+    bits.chars().map(|c| reverse_bit(c)).join("")
+}
+
+fn reverse_bit(bit: char) -> char {
     if bit == '0' { '1' } else { '0' }
 }
 
@@ -47,7 +56,7 @@ fn decimal(bits: &str) -> usize {
 }
 
 fn range(input: &Vec<String>) -> Range<usize> {
-    (0..input.first().unwrap().len())
+    0..input.first().unwrap().len()
 }
 
 #[cfg(test)]
