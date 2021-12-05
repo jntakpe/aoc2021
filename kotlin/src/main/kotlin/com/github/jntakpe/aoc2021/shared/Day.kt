@@ -2,7 +2,7 @@ package com.github.jntakpe.aoc2021.shared
 
 interface Day {
 
-    val input: List<Any>
+    val input: Any
 
     fun part1(): Int
 
