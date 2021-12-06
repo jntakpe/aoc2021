@@ -34,17 +34,25 @@ impl Day for Day4 {
     fn part1(&self) -> usize {
         let mut boards = self.boards.clone();
         for number in &self.numbers {
-            for board in &mut boards {
-                if board.complete(*number) {
-                    return *number * board.result();
-                }
+            boards.iter_mut().for_each(|b| b.complete(*number));
+            if let Some(resolved) = boards.iter().find(|b| b.resolved) {
+                return *number * resolved.result();
             }
         }
         panic!("No result found")
     }
 
     fn part2(&self) -> usize {
-        todo!()
+        let mut boards = self.boards.clone();
+        for number in &self.numbers {
+            boards.iter_mut().for_each(|b| b.complete(*number));
+            if boards.len() > 1 {
+                boards.retain(|b| !b.resolved)
+            } else if boards[0].resolved {
+                return *number * boards[0].result()
+            }
+        }
+        panic!("No result found")
     }
 }
 
@@ -70,18 +78,16 @@ impl Board {
         self.cells.iter().filter(|c| !c.called).map(|c| c.value).sum()
     }
 
-    fn complete(&mut self, number: usize) -> bool {
+    fn complete(&mut self, number: usize) {
         if self.resolved {
-            return false;
+            return;
         }
         let cells = self.cells.clone();
         if let Some(cell) = self.cells.iter_mut().find(|c| c.value == number) {
             if Board::call(&cells, cell) {
                 self.resolve();
             }
-            return self.resolved;
         }
-        return false;
     }
 
     fn call(cells: &Vec<Cell>, cell: &mut Cell) -> bool {
