@@ -18,13 +18,13 @@ object Day5 : Day {
 
     data class Line(val from: Position, val to: Position) {
 
-        val straight = from.straightPath(to)
-        val diagonal = from.diagonal(to)
+        val straight = from straight to
+        val diagonal = from diagonal to
     }
 
     data class Position(val x: Int, val y: Int) {
 
-        fun straightPath(other: Position): List<Position> {
+        infix fun straight(other: Position): List<Position> {
             return if (notEqual(other) { x } xor notEqual(other) { y }) {
                 if (notEqual(other) { x }) {
                     (if (x < other.x) (x..other.x) else (x downTo other.x)).map { copy(x = it) }
@@ -36,7 +36,7 @@ object Day5 : Day {
             }
         }
 
-        fun diagonal(other: Position): List<Position> {
+        infix fun diagonal(other: Position): List<Position> {
             return if (notEqual(other) { x } && notEqual(other) { y } && abs(x - other.x) == abs(y - other.y)) {
                 val xRange = if (x < other.x) (x..other.x) else (x downTo other.x)
                 val yRange = if (y < other.y) (y..other.y) else (y downTo other.y)
