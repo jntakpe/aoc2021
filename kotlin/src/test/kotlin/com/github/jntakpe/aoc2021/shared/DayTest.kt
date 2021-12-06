@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test
 abstract class DayTest<T : Day> {
 
     abstract val day: T
-    abstract val expectPart1: Int
-    abstract val expectPart2: Int
+    abstract val expectPart1: Number
+    abstract val expectPart2: Number
 
     @Test
     fun `part 1 sample is ok`() {
