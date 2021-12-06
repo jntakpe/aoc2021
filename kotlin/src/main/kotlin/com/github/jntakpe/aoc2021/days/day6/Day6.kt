@@ -5,8 +5,7 @@ import com.github.jntakpe.aoc2021.shared.readInputLines
 
 object Day6 : Day {
 
-    override val input =
-        readInputLines(6).joinToString("").split(",").groupingBy { it.trim().toInt() }.eachCount().mapValues { it.value.toLong() }
+    override val input = readInputLines(6).joinToString("").split(",").groupingBy { it.toInt() }.eachCount().mapValues { it.value.toLong() }
 
     override fun part1() = input.total(80)
 
