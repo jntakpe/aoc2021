@@ -8,9 +8,11 @@ object Day5 : Day {
 
     override val input: List<Line> = readInputLines(5).map { it.split("->").parseLine() }
 
-    override fun part1() = input.flatMap { it.straight }.groupingBy { it }.eachCount().filter { it.value >= 2 }.count()
+    override fun part1() = input.flatMap { it.straight }.result()
 
-    override fun part2() = input.flatMap { it.straight + it.diagonal }.groupingBy { it }.eachCount().filter { it.value >= 2 }.count()
+    override fun part2() = input.flatMap { it.straight + it.diagonal }.result()
+
+    private fun List<Position>.result() = groupingBy { it }.eachCount().filter { it.value >= 2 }.count()
 
     private fun List<String>.parseLine() = map { it.trim().split(",").parsePosition() }.run { Line(first(), last()) }
 
@@ -27,9 +29,9 @@ object Day5 : Day {
         infix fun straight(other: Position): List<Position> {
             return if (notEqual(other) { x } xor notEqual(other) { y }) {
                 if (notEqual(other) { x }) {
-                    (if (x < other.x) (x..other.x) else (x downTo other.x)).map { copy(x = it) }
+                    progression(other) { x }.map { copy(x = it) }
                 } else {
-                    (if (y < other.y) (y..other.y) else (y downTo other.y)).map { copy(y = it) }
+                    progression(other) { y }.map { copy(y = it) }
                 }
             } else {
                 emptyList()
@@ -38,14 +40,17 @@ object Day5 : Day {
 
         infix fun diagonal(other: Position): List<Position> {
             return if (notEqual(other) { x } && notEqual(other) { y } && abs(x - other.x) == abs(y - other.y)) {
-                val xRange = if (x < other.x) (x..other.x) else (x downTo other.x)
-                val yRange = if (y < other.y) (y..other.y) else (y downTo other.y)
-                xRange.zip(yRange).map { copy(x = it.first, y = it.second) }
+                val map = progression(other) { x }.zip(progression(other) { y }).map { Position(it.first, it.second) }
+                map
             } else {
                 emptyList()
             }
         }
 
         private inline fun notEqual(other: Position, extract: Position.() -> Int) = extract() != other.extract()
+
+        private inline fun progression(other: Position, extract: Position.() -> Int): IntProgression {
+            return if (extract() < other.extract()) (extract()..other.extract()) else (extract() downTo other.extract())
+        }
     }
 }
