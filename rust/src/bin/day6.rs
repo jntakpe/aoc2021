@@ -56,6 +56,6 @@ mod tests {
     }
 
     fn sample_day() -> Day6 {
-        Day6::new(vec![3, 4, 3, 1, 2])
+        Day6::new(vec![String::from("3,4,3,1,2")])
     }
 }
