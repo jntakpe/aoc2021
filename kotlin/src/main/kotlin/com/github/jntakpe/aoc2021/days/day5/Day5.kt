@@ -6,7 +6,7 @@ import kotlin.math.abs
 
 object Day5 : Day {
 
-    override val input: List<Line> = readInputLines(5).map { it.split("->").parseLine() }
+    override val input = readInputLines(5).map { it.split("->").parseLine() }
 
     override fun part1() = input.flatMap { it.straight }.result()
 
@@ -40,8 +40,7 @@ object Day5 : Day {
 
         infix fun diagonal(other: Position): List<Position> {
             return if (notEqual(other) { x } && notEqual(other) { y } && abs(x - other.x) == abs(y - other.y)) {
-                val map = progression(other) { x }.zip(progression(other) { y }).map { Position(it.first, it.second) }
-                map
+                progression(other) { x }.zip(progression(other) { y }).map { Position(it.first, it.second) }
             } else {
                 emptyList()
             }

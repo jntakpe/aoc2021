@@ -5,7 +5,7 @@ import com.github.jntakpe.aoc2021.shared.readInputLines
 
 object Day8 : Day {
 
-    override val input = readInputLines(8).filter { it.isNotBlank() }.map { Line(it) }
+    override val input = readInputLines(8).map { Line(it) }
 
     override fun part1() = input.sumOf { it.countDirectSolution() }
 
@@ -33,18 +33,18 @@ object Day8 : Day {
                 this[7] = it[3]!!.single()
                 this[4] = it[4]!!.single()
                 this[8] = it[7]!!.single()
-                it[6]!!.forEach { word ->
+                it[6]!!.forEach { pattern ->
                     when {
-                        !word.containsAll(this[1]!!) -> this[6] = word
-                        word.containsAll(this[4]!!) -> this[9] = word
-                        else -> this[0] = word
+                        !pattern.containsAll(this[1]!!) -> this[6] = pattern
+                        pattern.containsAll(this[4]!!) -> this[9] = pattern
+                        else -> this[0] = pattern
                     }
                 }
-                it[5]!!.forEach { word ->
+                it[5]!!.forEach { pattern ->
                     when {
-                        word.containsAll(this[1]!!) -> this[3] = word
-                        this[9]!!.containsAll(word) -> this[5] = word
-                        else -> this[2] = word
+                        pattern.containsAll(this[1]!!) -> this[3] = pattern
+                        this[9]!!.containsAll(pattern) -> this[5] = pattern
+                        else -> this[2] = pattern
                     }
                 }
             }

@@ -7,19 +7,16 @@ object Day3 : Day {
 
     private const val ZERO = '0'
     private const val ONE = '1'
-    override val input: List<String> = readInputLines(3)
-    private val range = (0 until input.first().length)
+    override val input = readInputLines(3)
 
-    override fun part1() = range.map { input.commonBit(it) }.joinToString("").let { it.toDecimal() * it.reverseBits().toDecimal() }
+    override fun part1(): Int {
+        return (0 until input.first().length).map { input.commonBit(it) }.joinToString("")
+            .let { it.toDecimal() * it.reverseBits().toDecimal() }
+    }
 
     override fun part2() = input.rating(0) * input.rating(0, true)
 
-    private fun List<String>.commonBit(index: Int): Char {
-        return if (map { it[index] }.count { it == ZERO } > size / 2)
-            ZERO
-        else
-            ONE
-    }
+    private fun List<String>.commonBit(index: Int) = if (map { it[index] }.count { it == ZERO } > size / 2) ZERO else ONE
 
     private fun List<String>.rating(index: Int, reverse: Boolean = false): Int {
         val char = commonBit(index).run { if (reverse) reverse() else this }
