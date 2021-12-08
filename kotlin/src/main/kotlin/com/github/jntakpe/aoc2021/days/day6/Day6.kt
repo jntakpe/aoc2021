@@ -1,11 +1,11 @@
 package com.github.jntakpe.aoc2021.days.day6
 
 import com.github.jntakpe.aoc2021.shared.Day
-import com.github.jntakpe.aoc2021.shared.readInputLines
+import com.github.jntakpe.aoc2021.shared.readInput
 
 object Day6 : Day {
 
-    override val input = readInputLines(6).joinToString("").split(",").groupingBy { it.toInt() }.eachCount().mapValues { it.value.toLong() }
+    override val input = readInput(6).split(",").groupingBy { it.toInt() }.eachCount().mapValues { it.value.toLong() }
 
     override fun part1() = input.total(80)
 
