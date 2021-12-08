@@ -7,6 +7,7 @@ import com.github.jntakpe.aoc2021.days.day4.Day4
 import com.github.jntakpe.aoc2021.days.day5.Day5
 import com.github.jntakpe.aoc2021.days.day6.Day6
 import com.github.jntakpe.aoc2021.days.day7.Day7
+import com.github.jntakpe.aoc2021.days.day8.Day8
 
 fun main(args: Array<String>) {
     when (val day = args[0].toInt()) {
@@ -17,6 +18,7 @@ fun main(args: Array<String>) {
         5 -> Day5.run()
         6 -> Day6.run()
         7 -> Day7.run()
+        8 -> Day8.run()
         else -> error("Day $day not implemented yet")
     }
 }
