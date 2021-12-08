@@ -55,13 +55,13 @@ fn sum_line(patterns: &Vec<String>, digits: &Vec<String>) -> usize {
 
 fn pattern_length(raw_patterns: &Vec<String>) -> HashMap<usize, Vec<String>> {
     let mut pattern_length: HashMap<usize, Vec<String>> = HashMap::with_capacity(6);
-
-    for (key, group) in &raw_patterns.iter().group_by(|elt| elt.len()) {
-        let patterns: Vec<String> = group.map(|s| String::from(s)).collect();
-        pattern_length.entry(key)
-            .and_modify(|e| e.append(&mut patterns.clone()))
-            .or_insert(patterns);
-    }
+    raw_patterns.iter()
+        .map(|p| (p.len(), p))
+        .for_each(|(l, p)| {
+            pattern_length.entry(l)
+                .and_modify(|e| e.push(String::from(p)))
+                .or_insert(vec![String::from(p)]);
+        });
     pattern_length
 }
 
