@@ -6,6 +6,6 @@ fun readInputNumbers(day: Int) = readInputLines(day).map { it.toInt() }
 
 fun readInputSplitOnBlank(day: Int) = readInput(day).split("(?m)^\\s*$".toRegex()).map { it.trim() }
 
-private fun readInput(day: Int) = "/day_$day.txt".run { resource()?.readText()?.trim() ?: error("Unable to read file: '$this'") }
+fun readInput(day: Int) = "/day_$day.txt".run { resource()?.readText()?.trim() ?: error("Unable to read file: '$this'") }
 
 private fun String.resource() = object {}::class.java.getResource(this)
