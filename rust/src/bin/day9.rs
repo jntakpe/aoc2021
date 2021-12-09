@@ -30,7 +30,7 @@ impl Day for Day9 {
             .sorted()
             .rev()
             .take(3)
-            .fold(1, |a, c| a * c)
+            .product()
     }
 }
 

@@ -34,7 +34,7 @@ impl Day for Day5 {
 
 impl Day5 {
     fn new(lines: Vec<String>) -> Day5 {
-        Day5 { lines: lines.iter().filter_map(|l| l.split_once("->").map(|s| parse_line(s))).collect() }
+        Day5 { lines: lines.iter().filter_map(|l| l.split_once("->").map(parse_line)).collect() }
     }
 
     fn count_occurrences(positions: Vec<Position>) -> usize {
@@ -78,7 +78,7 @@ impl Line {
         if axis(&self.from) < axis(&self.to) {
             return (axis(&self.from)..=axis(&self.to)).collect();
         }
-        return (axis(&self.to)..=axis(&self.from)).rev().collect();
+        (axis(&self.to)..=axis(&self.from)).rev().collect()
     }
 }
 

@@ -25,7 +25,7 @@ impl Day for Day3 {
     }
 }
 
-fn common_bit(bits: &Vec<String>, index: usize) -> char {
+fn common_bit(bits: &[String], index: usize) -> char {
     let count = bits.iter().filter_map(|s| s.chars().nth(index)).filter(|c| *c == '0').count();
     if count > bits.len() / 2 {
         '0'
@@ -34,9 +34,9 @@ fn common_bit(bits: &Vec<String>, index: usize) -> char {
     }
 }
 
-fn rating(bits: &Vec<String>, index: usize, reverse: bool) -> usize {
-    let bit = if reverse { reverse_bit(common_bit(&bits, index)) } else { common_bit(&bits, index) };
-    let filtered: Vec<String> = bits.iter().filter(|s| s.chars().nth(index).unwrap() == bit).map(|s| String::from(s)).collect();
+fn rating(bits: &[String], index: usize, reverse: bool) -> usize {
+    let bit = if reverse { reverse_bit(common_bit(bits, index)) } else { common_bit(bits, index) };
+    let filtered: Vec<String> = bits.iter().filter(|s| s.chars().nth(index).unwrap() == bit).map(String::from).collect();
     if filtered.len() == 1 {
         return decimal(filtered[0].as_str());
     }
@@ -44,7 +44,7 @@ fn rating(bits: &Vec<String>, index: usize, reverse: bool) -> usize {
 }
 
 fn reverse_bits(bits: &str) -> String {
-    bits.chars().map(|c| reverse_bit(c)).join("")
+    bits.chars().map(reverse_bit).join("")
 }
 
 fn reverse_bit(bit: char) -> char {
@@ -55,7 +55,7 @@ fn decimal(bits: &str) -> usize {
     usize::from_str_radix(bits, 2).unwrap()
 }
 
-fn range(input: &Vec<String>) -> Range<usize> {
+fn range(input: &[String]) -> Range<usize> {
     0..input.first().unwrap().len()
 }
 

@@ -27,7 +27,7 @@ fn read_lines(day: usize, preserve_empty: bool) -> Vec<String> {
 
 fn open_file(day: usize) -> File {
     let filename = format!("inputs/day_{}.txt", day);
-    File::open(&filename).expect(format!("Unable to open file: '{}'", &filename).as_str())
+    File::open(&filename).unwrap_or_else(|_| panic!("Unable to open file: '{}'", &filename))
 }
 
 pub trait Day {

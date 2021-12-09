@@ -30,7 +30,7 @@ impl Day2 {
     }
 
     fn parse(raw: &str) -> Move {
-        let split: Vec<&str> = raw.split(" ").collect();
+        let split: Vec<&str> = raw.split(' ').collect();
         let (direction, unit) = (split[0], split[1].parse::<isize>().unwrap());
         match direction {
             "forward" => Forward(unit),
@@ -66,7 +66,7 @@ impl Position {
     }
 
     fn result(&self) -> usize {
-        (&self.horizontal * &self.depth.abs()) as usize
+        (self.horizontal * self.depth.abs()) as usize
     }
 }
 

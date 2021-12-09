@@ -22,17 +22,18 @@ impl Day for Day6 {
 
 impl Day6 {
     fn new(input: Vec<String>) -> Self {
-        let numbers: Vec<usize> = input.join("").split(',').map(|s| s.parse::<usize>().unwrap()).collect();
-        let fish_count = numbers.into_iter().fold(HashMap::new(), |mut m, i| {
-            *m.entry(i).or_default() += 1;
-            m
-        });
+        let fish_count = input.join("").split(',')
+            .map(|s| s.parse::<usize>().unwrap())
+            .fold(HashMap::new(), |mut m, i| {
+                *m.entry(i).or_default() += 1;
+                m
+            });
         Day6 { fish_count }
     }
 }
 
 fn total(mut fish_count: HashMap<usize, usize>, remaining: usize) -> usize {
-    let newborn = fish_count.get(&0).map(|i| *i).unwrap_or(0);
+    let newborn = fish_count.get(&0).copied().unwrap_or(0);
     let mut updated: HashMap<usize, usize> = fish_count.iter_mut().filter(|(k, _)| **k != 0).map(|(k, v)| (*k - 1, *v)).collect();
     if newborn > 0 {
         updated.insert(8, newborn);

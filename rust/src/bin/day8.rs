@@ -32,18 +32,18 @@ impl Day8 {
     fn parse_line(line: &str) -> (Vec<String>, Vec<String>) {
         line.split('|')
             .map(|s| s.trim())
-            .map(|p| p.split_whitespace().map(|s| String::from(s)).collect())
+            .map(|p| p.split_whitespace().map(String::from).collect())
             .collect_tuple()
             .unwrap()
     }
 }
 
-fn count_guessable(words: &Vec<String>) -> usize {
+fn count_guessable(words: &[String]) -> usize {
     words.iter().filter(|d| vec![2, 3, 4, 7].contains(&d.len())).count()
 }
 
-fn sum_line(patterns: &Vec<String>, digits: &Vec<String>) -> usize {
-    let lengths = pattern_length(&patterns);
+fn sum_line(patterns: &[String], digits: &[String]) -> usize {
+    let lengths = pattern_length(patterns);
     let digit_map = digit_map(&lengths);
     digits.iter()
         .map(|d| digit_map.iter().find(|(_, v)| is_same(v, d)).unwrap())
@@ -53,14 +53,14 @@ fn sum_line(patterns: &Vec<String>, digits: &Vec<String>) -> usize {
         .unwrap()
 }
 
-fn pattern_length(raw_patterns: &Vec<String>) -> HashMap<usize, Vec<String>> {
+fn pattern_length(raw_patterns: &[String]) -> HashMap<usize, Vec<String>> {
     let mut pattern_length: HashMap<usize, Vec<String>> = HashMap::with_capacity(6);
     raw_patterns.iter()
         .map(|p| (p.len(), p))
         .for_each(|(l, p)| {
             pattern_length.entry(l)
                 .and_modify(|e| e.push(String::from(p)))
-                .or_insert(vec![String::from(p)]);
+                .or_insert_with(|| vec![String::from(p)]);
         });
     pattern_length
 }
@@ -93,11 +93,11 @@ fn digit_map(pattern_length: &HashMap<usize, Vec<String>>) -> HashMap<usize, Str
 }
 
 fn single_value(map: &HashMap<usize, Vec<String>>, key: usize) -> String {
-    map[&key].first().map(|w| String::from(w)).unwrap()
+    map[&key].first().map(String::from).unwrap()
 }
 
 fn multi_values(map: &HashMap<usize, Vec<String>>, key: usize) -> Vec<String> {
-    map[&key].iter().map(|w| String::from(w)).collect()
+    map[&key].iter().map(String::from).collect()
 }
 
 fn contains_all(digit: &str, other: &str) -> bool {
