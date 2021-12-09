@@ -1,5 +1,6 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader};
+use std::time::SystemTime;
 
 pub fn read_input_numbers(day: usize) -> Vec<usize> {
     read_input_lines(day)
@@ -35,7 +36,11 @@ pub trait Day {
     fn part2(&self) -> usize;
 
     fn run(&self) {
-        println!("Part 1: {}", self.part1());
-        println!("Part 2: {}", self.part2());
+        let now = SystemTime::now();
+        let part1 = self.part1();
+        println!("Part 1: {} in {} ms", part1, now.elapsed().unwrap().as_millis());
+        let now = SystemTime::now();
+        let part2 = self.part2();
+        println!("Part 2: {} in {} ms", part2, now.elapsed().unwrap().as_millis());
     }
 }
