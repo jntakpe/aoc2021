@@ -25,14 +25,10 @@ object Day9 : Day {
         fun adjacent() = listOf(copy(x = x - 1), copy(x = x + 1), copy(y = y - 1), copy(y = y + 1))
     }
 
-    private fun Map<Position, Int>.lowPoints(): Map<Position, Int> {
-        return map { e -> (e to e.key.adjacent().mapNotNull { input[it] }) }
-            .filter { (e, adjacent) -> adjacent.all { it > e.value } }
-            .associate { (e) -> e.toPair() }
-    }
+    private fun Map<Position, Int>.lowPoints() = filter { (k, v) -> k.adjacent().mapNotNull { input[it] }.all { it > v } }
 
     private fun Map<Position, Int>.basin(initial: Map<Position, Int>): Int {
-        val next = initial.flatMap { nextBasicCells(it.key, it.value, initial) }.toMap()
+        val next = initial.flatMap { nextBasinCells(it.key, it.value, initial) }.toMap()
         val all = initial + next
         if (next.isNotEmpty()) {
             return basin(all)
@@ -40,7 +36,7 @@ object Day9 : Day {
         return all.values.count()
     }
 
-    private fun Map<Position, Int>.nextBasicCells(position: Position, value: Int, initial: Map<Position, Int>): List<Pair<Position, Int>> {
-        return position.adjacent().mapNotNull { p -> get(p)?.takeIf { !initial.containsKey(p) && it > value && it != 9 }?.let { p to it } }
+    private fun Map<Position, Int>.nextBasinCells(position: Position, value: Int, cells: Map<Position, Int>): List<Pair<Position, Int>> {
+        return position.adjacent().mapNotNull { p -> get(p)?.takeIf { !cells.containsKey(p) && it > value && it != 9 }?.let { p to it } }
     }
 }
