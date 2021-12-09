@@ -13,7 +13,7 @@ struct Day9 {
 }
 
 
-#[derive(Hash, Eq, PartialEq, Clone)]
+#[derive(Hash, Eq, PartialEq)]
 struct Position {
     x: usize,
     y: usize,
@@ -44,33 +44,33 @@ impl Day9 {
         Day9 { digits }
     }
 
-    fn low_points(&self) -> HashMap<Position, usize> {
+    fn low_points(&self) -> HashMap<&Position, usize> {
         self.digits.iter()
             .filter(|(pos, value)| {
                 pos.adjacent().iter().filter_map(|p| self.digits.get(p)).all(|c| *c > **value)
             })
-            .map(|(k, v)| (k.clone(), *v))
+            .map(|(k, v)| (k, *v))
             .collect()
     }
 
-    fn basin(&self, initial: HashMap<Position, usize>) -> usize {
-        let next: HashMap<Position, usize> = initial.iter()
+    fn basin(&self, initial: HashMap<&Position, usize>) -> usize {
+        let next: HashMap<&Position, usize> = initial.iter()
             .flat_map(|(p, v)| self.next_basin_cells(p, *v, &initial))
             .collect();
         let empty = next.is_empty();
-        let all: HashMap<Position, usize> = initial.into_iter().chain(next).collect();
+        let all: HashMap<&Position, usize> = initial.into_iter().chain(next).collect();
         if !empty {
             return self.basin(all);
         }
         return all.values().count();
     }
 
-    fn next_basin_cells(&self, position: &Position, value: usize, cells: &HashMap<Position, usize>) -> Vec<(Position, usize)> {
-        position.adjacent().into_iter()
+    fn next_basin_cells(&self, position: &Position, value: usize, cells: &HashMap<&Position, usize>) -> Vec<(&Position, usize)> {
+        position.adjacent().iter()
             .filter_map(|p| {
-                self.digits.get(&p)
-                    .filter(|v| !cells.contains_key(&p) && **v > value && **v != 9)
-                    .map(|v| (p, *v))
+                self.digits.get_key_value(p)
+                    .filter(|(_, v)| !cells.contains_key(&p) && **v > value && **v != 9)
+                    .map(|(k, v)| (k, *v))
             })
             .collect()
     }
