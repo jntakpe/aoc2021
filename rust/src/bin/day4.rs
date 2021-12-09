@@ -90,12 +90,12 @@ impl Board {
         }
     }
 
-    fn call(cells: &Vec<Cell>, cell: &mut Cell) -> bool {
+    fn call(cells: &[Cell], cell: &mut Cell) -> bool {
         cell.call();
-        Board::all_complete(cells, &cell, |c| c.position.x) || Board::all_complete(cells, &cell, |c| c.position.y)
+        Board::all_complete(cells, cell, |c| c.position.x) || Board::all_complete(cells, cell, |c| c.position.y)
     }
 
-    fn all_complete(cells: &Vec<Cell>, cell: &Cell, extract: fn(&Cell) -> usize) -> bool {
+    fn all_complete(cells: &[Cell], cell: &Cell, extract: fn(&Cell) -> usize) -> bool {
         cells.iter().filter(|c| c.position != cell.position && extract(c) == extract(cell)).all(|c| c.called)
     }
 }
@@ -110,7 +110,7 @@ impl Cell {
     }
 }
 
-fn parse_numbers(lines: &Vec<String>) -> Vec<usize> {
+fn parse_numbers(lines: &[String]) -> Vec<usize> {
     lines.first().map_or(Vec::new(), |i| i.split(',').map(|s| s.parse::<usize>().unwrap()).collect())
 }
 
@@ -120,7 +120,7 @@ fn parse_boards(lines: Vec<String>) -> Vec<Board> {
     board_lines.chunks(i).map(|l| Board::new(parse_cells(l))).collect()
 }
 
-fn board_size(lines: &Vec<String>) -> usize {
+fn board_size(lines: &[String]) -> usize {
     lines.iter().enumerate().find_or_first(|(_, l)| l.trim().is_empty()).map(|(i, _)| i).unwrap() + 1
 }
 
