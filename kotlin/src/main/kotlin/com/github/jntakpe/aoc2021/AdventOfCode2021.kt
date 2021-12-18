@@ -9,6 +9,7 @@ import com.github.jntakpe.aoc2021.days.day14.Day14
 import com.github.jntakpe.aoc2021.days.day15.Day15
 import com.github.jntakpe.aoc2021.days.day16.Day16
 import com.github.jntakpe.aoc2021.days.day17.Day17
+import com.github.jntakpe.aoc2021.days.day18.Day18
 import com.github.jntakpe.aoc2021.days.day2.Day2
 import com.github.jntakpe.aoc2021.days.day3.Day3
 import com.github.jntakpe.aoc2021.days.day4.Day4
@@ -37,6 +38,7 @@ fun main(args: Array<String>) {
         15 -> Day15.run()
         16 -> Day16.run()
         17 -> Day17.run()
+        18 -> Day18.run()
         else -> error("Day $day not implemented yet")
     }
 }
