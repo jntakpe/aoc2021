@@ -10,44 +10,32 @@ object Day11 : Day {
         .flatMapIndexed { y, i -> i.mapIndexed { x, v -> (Position(x, y) to v) } }
         .toMap()
 
-    override fun part1(): Int {
-        val lights = input.toMutableMap()
-        var count = 0
-        repeat(100) {
-            count += lights.step()
-        }
-        return count
-    }
+    override fun part1() = with(input.toMutableMap()) { (0 until 100).fold(0) { a, _ -> a + step() } }
 
     override fun part2(): Int {
-        val lights = input.toMutableMap()
-        repeat(Int.MAX_VALUE) { step ->
-            lights.step()
-            if (lights.all { it.value == 0 }) return step + 1
+        with(input.toMutableMap()) {
+            repeat(Int.MAX_VALUE) { step ->
+                step()
+                if (all { it.value == 0 }) return step + 1
+            }
+            error("No result found")
         }
-        return 0
     }
 
     private fun MutableMap<Position, Int>.step(): Int {
         replaceAll { _, v -> v + 1 }
-        val count = input.keys.sumOf { if (this[it] == 10) flash(it) else 0 }
-        input.keys.forEach { if (this[it] == -1) computeIfPresent(it) { _, _ -> 0 } }
+        val count = asSequence().filter { (_, v) -> v == 10 }.map { (k) -> flash(k) }.sum()
+        asSequence().filter { (_, v) -> v == -1 }.forEach { (k) -> this[k] = 0 }
         return count
     }
 
     private fun MutableMap<Position, Int>.flash(position: Position): Int {
-        var flashes = 1
-        computeIfPresent(position) { _, _ -> -1 }
-        val adjacent = position.adjacent()
-        filterKeys { it in adjacent }.forEach {
-            if (getOrDefault(it.key, 0) != -1) {
-                computeIfPresent(it.key) { _, v -> v + 1 }
-                if (getOrDefault(it.key, 0) >= 10) {
-                    flashes += flash(it.key)
-                }
-            }
-        }
-        return flashes
+        this[position] = -1
+        return asSequence().filter { (k) -> k in position.adjacent() }
+            .filter { (_, v) -> v != -1 }
+            .onEach { (k, v) -> this[k] = v + 1 }
+            .filter { (k, v) -> getOrDefault(k, 0) >= 10 }
+            .fold(1) { a, (k) -> a + flash(k) }
     }
 
     data class Position(val x: Int, val y: Int) {
@@ -56,7 +44,7 @@ object Day11 : Day {
             return (0..2)
                 .flatMap { x -> (0..2).map { x to it } }
                 .map { (x, y) -> this.x + x - 1 to this.y + y - 1 }
-                .filter { (x, y) -> x != this.x || y != this.y }
+                .filter { (x, y) -> this != Position(x, y) }
                 .map { (x, y) -> Position(x, y) }
         }
     }
