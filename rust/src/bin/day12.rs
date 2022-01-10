@@ -37,8 +37,8 @@ impl Day12 {
         Day12 { paths: lines.iter().flat_map(|l| parse(l.as_str())).collect() }
     }
 
-    fn visit(&self, cave: &str, visited: &Vec<&str>, not_visited: fn(&str, &Vec<&str>, bool) -> bool, wildcard: bool) -> usize {
-        let all: Vec<&str> = visited.iter().chain(vec![&cave]).map(|s| *s).collect();
+    fn visit(&self, cave: &str, visited: &[&str], not_visited: fn(&str, &Vec<&str>, bool) -> bool, wildcard: bool) -> usize {
+        let all: Vec<&str> = visited.iter().chain(vec![&cave]).copied().collect();
         if cave == "end" { return 1; }
         self.paths.iter()
             .filter(|(start, end)| cave == start && not_visited(end, &all, wildcard))
@@ -50,10 +50,10 @@ impl Day12 {
 }
 
 fn parse(line: &str) -> Vec<(String, String)> {
-    return line.split("-")
-        .map(|s| String::from(s))
+    return line.split('-')
+        .map(String::from)
         .permutations(2)
-        .map(|l| l.iter().map(|s| String::from(s)).collect_tuple().unwrap())
+        .map(|l| l.iter().map(String::from).collect_tuple().unwrap())
         .collect();
 }
 
