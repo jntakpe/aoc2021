@@ -15,7 +15,7 @@ impl Day for Day12 {
         self.visit(
             "start",
             &Vec::new(),
-            |cave, visited, _| cave.to_uppercase() == *cave || !visited.contains(cave),
+            |cave, visited, _| cave.to_uppercase() == *cave || !visited.contains(&cave),
             false,
         )
     }
@@ -25,7 +25,7 @@ impl Day for Day12 {
             "start",
             &Vec::new(),
             |cave, visited, wildcard| {
-                cave != "start" && wildcard || cave.to_uppercase() == *cave || !visited.contains(cave)
+                cave != "start" && wildcard || cave.to_uppercase() == *cave || !visited.contains(&cave)
             },
             true,
         )
@@ -37,8 +37,8 @@ impl Day12 {
         Day12 { paths: lines.iter().flat_map(|l| parse(l.as_str())).collect() }
     }
 
-    fn visit(&self, cave: &str, visited: &Vec<String>, not_visited: fn(&String, &Vec<String>, bool) -> bool, wildcard: bool) -> usize {
-        let all: Vec<String> = visited.iter().map(|s| String::from(s)).chain(vec![String::from(cave)]).collect();
+    fn visit(&self, cave: &str, visited: &Vec<&str>, not_visited: fn(&str, &Vec<&str>, bool) -> bool, wildcard: bool) -> usize {
+        let all: Vec<&str> = visited.iter().chain(vec![&cave]).map(|s| *s).collect();
         if cave == "end" { return 1; }
         self.paths.iter()
             .filter(|(start, end)| cave == start && not_visited(end, &all, wildcard))
