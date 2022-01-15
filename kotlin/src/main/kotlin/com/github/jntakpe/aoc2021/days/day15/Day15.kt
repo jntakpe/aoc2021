@@ -32,7 +32,7 @@ object Day15 : Day {
             listOf<(Position, Int) -> Position>({ p, i -> p.scaleX(end, i) }, { p, i -> p.scaleY(end, i) })
                 .forEach { scale ->
                     positions = (1 until times).fold(positions.toMutableMap()) { a, c ->
-                        a.apply { putAll(positions.mapKeys { (p, _) -> scale(p, c) }.mapValues { (_, v) -> next(v, c) }) }
+                        a.apply { putAll(positions.mapKeys { (p, _) -> scale(p, c) }.mapValues { (_, v) -> ((c + v - 1) % 9) + 1 }) }
                     }
                 }
             return Instructions(positions, positions.keys.last())
@@ -40,21 +40,21 @@ object Day15 : Day {
 
         fun shortestPath(): Int {
             val queue = PriorityQueue<Node>().apply { add(Node(Position.START, 0)) }
-            val risks = positions.mapValues { Int.MAX_VALUE }.toMutableMap().apply { computeIfPresent(Position.START) { _, _ -> 0 } }
+            val risks = positions.mapValues { (k, _) -> if (k == Position.START) 0 else Int.MAX_VALUE }.toMutableMap()
             while (queue.isNotEmpty()) {
                 val node = queue.poll()
-                node.position.adjacent().forEach { pos ->
-                    val risk = positions[pos]?.let { node.risk + it }
-                    if (risk?.let { risks.getOrDefault(pos, Int.MAX_VALUE) > it } == true) {
-                        risks.computeIfPresent(pos) { _, _ -> risk }
-                        queue.add(Node(pos, risk))
+                if (node.position == end) return risks[end]!!
+                if (risks[node.position]!! < node.risk) continue
+                node.position.adjacent()
+                    .mapNotNull { p -> positions[p]?.let { Node(p, it + node.risk) } }
+                    .filter { it.risk < risks[it.position]!! }
+                    .forEach {
+                        risks[it.position] = it.risk;
+                        queue.add(it)
                     }
-                }
             }
-            return risks[end]!!
+            error("Shortest path not found")
         }
-
-        private fun next(current: Int, repeat: Int) = (current + repeat).let { if (it > 9) it - 9 else it }
     }
 
     class Node(val position: Position, val risk: Int) : Comparable<Node> {
