@@ -57,14 +57,14 @@ impl Day13 {
 
     fn parse_positions(lines: &[String], split_idx: usize) -> HashSet<Position> {
         Self::sub_vec(lines, 0..split_idx).iter()
-            .filter_map(|s| s.split_once(","))
+            .filter_map(|s| s.split_once(','))
             .map(|(x, y)| Position::new(x.parse::<usize>().unwrap(), y.parse::<usize>().unwrap()))
             .collect()
     }
 
     fn parse_folds(lines: &[String], split_idx: usize) -> Vec<Fold> {
         Day13::sub_vec(lines, split_idx..lines.len()).iter()
-            .filter_map(|s| s.split_once("="))
+            .filter_map(|s| s.split_once('='))
             .map(|(s, i)| Fold {
                 axis: match s.chars().last().unwrap() {
                     'x' => Axis::X,

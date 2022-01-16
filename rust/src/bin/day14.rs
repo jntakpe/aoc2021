@@ -33,7 +33,7 @@ impl Day14 {
         }
     }
 
-    fn parse_frequency(template: &String) -> HashMap<String, usize> {
+    fn parse_frequency(template: &str) -> HashMap<String, usize> {
         return template
             .chars()
             .tuple_windows()
@@ -46,14 +46,14 @@ impl Day14 {
             .collect();
     }
 
-    fn parse_rules(rule: &String) -> Option<(String, Vec<String>)> {
+    fn parse_rules(rule: &str) -> Option<(String, Vec<String>)> {
         return rule.split_once(" -> ")
             .map(|(s, c)| (s.to_string(), vec![format!("{}{}", &s[..1], c), format!("{}{}", c, &s[1..])]));
     }
 
     fn result(&self, steps: usize) -> usize {
         let char_freq = self.after_step(steps).iter().fold(HashMap::from([(self.last_char, 1)]), |mut a, (rule, freq)| {
-            a.entry(rule.chars().nth(0).unwrap()).and_modify(|f| { *f += freq }).or_insert(*freq);
+            a.entry(rule.chars().next().unwrap()).and_modify(|f| { *f += freq }).or_insert(*freq);
             a
         });
         return char_freq.values().max().unwrap() - char_freq.values().min().unwrap()
