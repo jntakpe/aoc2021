@@ -19,7 +19,7 @@ jobs:
       run:
         working-directory: ./rust
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
